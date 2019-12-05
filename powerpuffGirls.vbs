@@ -39,6 +39,24 @@ End Sub
 
 call filterData("K1","Exceptions", 11, "=0")
 call removeFilter()
+			
+'Deletes the rows copied to "Exception" sheet from the "Invoices" sheet 
+nUsedCols = sourceWorksheet.UsedRange.Columns.Count
+nUsedRows = sourceWorksheet.UsedRange.Rows.Count
+For j=1 to nUsedCols	
+    If sourceWorkSheet.cells(1, j).value = "Item" Then		
+        For i=1 to nUsedRows			
+            If sourceWorkSheet.Cells(i, j).value = "0" Then
+                'converts the integer i to string
+                CStr(i)               
+                Set objRange = sourceWorkSheet.Range("A" & i).EntireRow			
+                objRange.Delete				
+				i=i-1			
+            End If		
+        Next	
+    End If	
+Next			
+			
 call filterData("Q1", "ROAD", 17, "=ROAD")
 call removeFilter()
 call filterData("Q1","PRIORITY", 17, "=PRIORITY")
@@ -61,20 +79,7 @@ call appendData("PRIORITY")
 call appendData("CTNLOCRED")
 call appendData("RTNCGC")
 call appendData("NXTFL")
-
-'Deletes the rows copied to "Exception" sheet from the "Invoices" sheet 
-nUsedCols = sourceWorksheet.UsedRange.Columns.Count
-nUsedRows = sourceWorksheet.UsedRange.Rows.Count
-For j=1 to nUsedCols	
-    If sourceWorkSheet.cells(1, j).value = "Item" Then		
-        For i=1 to nUsedRows			
-            If sourceWorkSheet.Cells(i, j).value = "0" Then
-                'converts the integer i to string
-                CStr(i)               
-                Set objRange = sourceWorkSheet.Range("A" & i).EntireRow			
-                objRange.Delete				
-				i=i-1			
-            End If		
-        Next	
-    End If	
-Next
+		
+sourceWorkBook.Save
+obj.Quit
+set obj = nothing
